@@ -1,7 +1,7 @@
 
 import $ from 'jquery';
 import _ from 'underscore';
-import rawTemplate from 'html!Templates/funnySquare.html';
+import rawTemplate from 'html!templates/funnySquare.html';
 import Handlebars from 'handlebars';
 
 var template;
@@ -11,13 +11,13 @@ var app = {
     app.render();
   },
   render: function(){
-    //display 6 squares
+    // display 6 squares
     var numberOfSquares = 6;
-    var renderedHtml = ''; 
+    var renderedHtml = '';
     _.times(numberOfSquares, function(index){
-      renderedHtml += template({ id: index });
+      renderedHtml += template({ id: index + 1 });
     });
-    $('h1').after(renderedHtml);
+    $('body').append(renderedHtml);
   }
 };
 

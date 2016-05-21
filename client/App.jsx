@@ -3,7 +3,7 @@ import $ from 'jquery';
 import 'styles/main.scss';
 import todos from 'pages/todo';
 import project from 'pages/project';
-import funnySquares from 'pages/funnySquares'; 
+import funnySquares from 'pages/funnySquares';
 
 $(function(){
 
@@ -11,7 +11,7 @@ $(function(){
   var url = window.location.pathname;
 
   // our first javascript router
-  switch (url){
+  switch (url) {
     case '/pages/todo.html':
       todos.init();
     break;
@@ -24,3 +24,4 @@ $(function(){
   }
 
 });
+

@@ -5,33 +5,36 @@ var $ = require('jquery');
 window.jQuery = window.$ = $;
 require('bootstrap');
 
-import _ from 'underscore'; 
+import _ from 'underscore';
 import Handlebars from 'handlebars';
 import lscache from 'lscache';
-import rawTemplate from 'html!Templates/todoItem.html';
- 
-// data model  
-var savedData = lscache.get('todos');
+import rawTemplate from 'templates/todoItem.html';
+
+// Data Model
 var todos;
+var savedData = lscache.get('todos');
 if (savedData === null) {
   todos = [];
 } else {
   todos = savedData;
 }
 
+
+// Application
 var template;
 var app = {
   init: function(){
-    app.compileTemplates();   
+    app.compileTemplates();
     app.render();
   },
   render: function(){
+    // render the todos
     lscache.set('todos', todos);
     var todoHtml = _.map(todos, function(todo){
-      return template(todo); 
-    });  
+      return template(todo);
+    });
     app.unbindEvents();
-    $('ul.list-group').html(todoHtml.join(''));
+    $('ul.list-group').html(todoHtml.join(""));
     app.bindEvents();
   },
   compileTemplates: function(){
@@ -41,7 +44,7 @@ var app = {
     $('.list-group-item').off();
     $('.add-todo-container button').off();
     $('input[type="checkbox"]').off();
-    $('list-group-item button').off();
+    $('.list-group-item button').off();
     $('.title-edit input').off();
   },
   bindEvents: function(){
@@ -63,28 +66,29 @@ var app = {
   bindCheckboxEvents: function(){
     var $checkboxes = $('input[type="checkbox"]');
     $checkboxes.on('change', function(){
-      var isChecked = !$(this).is(':checked');
-      if (isChecked) {
-        $(this).parent().parent().removeClass('disabled');
+      var wasChecked = $(this).is(':checked');
+      if (!wasChecked) {
+        $(this).parent().parent().removeClass("disabled");
       } else {
-        $(this).parent().parent().addClass('disabled');
+        $(this).parent().parent().addClass("disabled");
       }
     });
   },
   bindAddTodoEvents: function(){
-    $('.add-todo-container button').on('click', function(){
-      var newTodoTitle = $('.add-todo-container input').val();
+    var $container = $('.add-todo-container');
+    $container.find('button').on('click', function(){
+      var newTodoTitle = $container.find('input').val();
       if (_.isString(newTodoTitle) && newTodoTitle.length > 2) {
-        var newTodoObject = { 
-          id: todos.length, 
+        var newTodoObject = {
+          id: todos.length,
           title: newTodoTitle, 
           completed: false 
         };
         todos.push(newTodoObject);
-        $('.add-todo-container input').val('');
-        app.render();
+        $container.find('input').val("");
+        app.render(); 
       }
-    });   
+    });
   },
   bindRemoveTodoEvents: function(){
     $('.list-group-item button').on('click', function(){
@@ -101,11 +105,12 @@ var app = {
     });
     $('.title-edit input').on('keypress', function(event){
       var key = event.which;
+      // if they hit the enter key
       if (key === 13) {
         var newTitle = $(this).val();
         var editId = $(this).attr('data-id');
         editId = parseInt(editId, 10);
-        //update the title in our model
+        // update the title in our model
         var editTodo = _.filter(todos, function(todo){
           if (todo.id === editId) {
             return true;
@@ -120,4 +125,3 @@ var app = {
 };
 
 module.exports = app;
-
