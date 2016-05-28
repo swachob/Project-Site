@@ -1,6 +1,8 @@
-# MyFirstRepo
+About:
 
-This is my repo. And it is really cool.
+[My Linkedin Account](http://www.linkedin.com/in/sloanewachob)
 
-[make a link](http://google.com)
+[DaVinci Coders](https://www.davinciinstitute.com/)
+
+
 

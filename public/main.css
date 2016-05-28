@@ -1,7 +1,14 @@
 .todo-container {
+  position: relative;
   width: 500px;
   margin: 5px auto;
-  margin-top: 20px;
+  left: 50%;
+  margin-left: -250px;
+  margin-top: 10px;
+}
+
+.todo-container {
+  font-family: 'Alegreya', serif;
 }
 
 .add-todo-container {
@@ -9,16 +16,17 @@
 }
 
 .add-todo-container .col-md-10 {
-  padding: 0;
+  padding-left: 0;
 }
 
 .add-todo-container .col-md-2 {
-  padding-right: 0;
+  padding-left: 0;
   text-align: right;
 }
 
 h1 {
-  color: red;
+  color: black;
+  font-family: helvetica;
 }
 
 .square {
@@ -28,14 +36,14 @@ h1 {
   background-color: #63a1f2;
   text-align: center;
   line-height: 100px;
-  font-family: arial;
+  font-family: helvetica;
   font-size: 42px;
   transform: none;
   transition: transform .5s;
 }
 
 .square-container {
-  perspective: 50px;
+  perspective: 150px;
   display: inline-block;
 }
 
@@ -61,12 +69,19 @@ h1 {
 
 .square5:hover {
   -webkit-transform: rotateX(45deg);
-  transform: rotateX(45deg);
+  perspective: rotateX(45deg);
   transition: transform .5s;
 }
 
 .square6:hover {
   transform: translate3d(20px, 50px, 100px);
+}
+
+body {
+  font-family: Monospace;
+  background-color: #f0f0f0;
+  margin: 0px;
+  overflow: hidden;
 }
 
 video {

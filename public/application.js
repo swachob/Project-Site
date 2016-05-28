@@ -66,6 +66,14 @@
 	
 	var _pagesFunnySquares2 = _interopRequireDefault(_pagesFunnySquares);
 	
+	var _pagesCanvasAscii = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"pages/canvasAscii\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+	
+	var _pagesCanvasAscii2 = _interopRequireDefault(_pagesCanvasAscii);
+	
+	var _componentsHeader = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"components/header\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+	
+	var _componentsHeader2 = _interopRequireDefault(_componentsHeader);
+	
 	(0, _jquery2['default'])(function () {
 	
 	  // what page are we on?
@@ -10003,9 +10011,9 @@
 	    $checkboxes.on('change', function () {
 	      var wasChecked = $(this).is(':checked');
 	      if (!wasChecked) {
-	        $(this).parent().parent().removeClass("disabled");
+	        $(this).parent().parent().removeClass('disabled');
 	      } else {
-	        $(this).parent().parent().addClass("disabled");
+	        $(this).parent().parent().addClass('disabled');
 	      }
 	    });
 	  },
@@ -10020,7 +10028,7 @@
 	          completed: false
 	        };
 	        todos.push(newTodoObject);
-	        $container.find('input').val("");
+	        $container.find('input').val('');
 	        app.render();
 	      }
 	    });
@@ -19212,9 +19220,9 @@
 	
 	var _underscore2 = _interopRequireDefault(_underscore);
 	
-	var _htmlTemplatesFunnySquareHtml = __webpack_require__(55);
+	var _templatesFunnySquareHtml = __webpack_require__(55);
 	
-	var _htmlTemplatesFunnySquareHtml2 = _interopRequireDefault(_htmlTemplatesFunnySquareHtml);
+	var _templatesFunnySquareHtml2 = _interopRequireDefault(_templatesFunnySquareHtml);
 	
 	var _handlebars = __webpack_require__(8);
 	
@@ -19223,17 +19231,16 @@
 	var template;
 	var app = {
 	  init: function init() {
-	    template = _handlebars2['default'].compile(_htmlTemplatesFunnySquareHtml2['default']);
+	    template = _handlebars2['default'].compile(_templatesFunnySquareHtml2['default']);
 	    app.render();
 	  },
 	  render: function render() {
-	    // display 6 squares
 	    var numberOfSquares = 6;
 	    var renderedHtml = '';
 	    _underscore2['default'].times(numberOfSquares, function (index) {
-	      renderedHtml += template({ id: index + 1 });
+	      renderedHtml += template({ id: index });
 	    });
-	    (0, _jquery2['default'])('body').append(renderedHtml);
+	    (0, _jquery2['default'])('h1').after(renderedHtml);
 	  }
 	};
 	
@@ -19243,7 +19250,7 @@
 /* 55 */
 /***/ function(module, exports) {
 
-	module.exports = "module.exports = \"<div class=\\\"square-container\\\">\\n  <div class=\\\"square square{{id}}\\\">\\n    <div class=\\\"inner\\\">{{id}}</div>\\n  </div>\\n</div>\";";
+	module.exports = "<div class=\"square-container\">\n  <div class=\"square square{{id}}\">\n    <div class=\"inner\">{{id}}</div>\n  </div>\n</div>";
 
 /***/ }
 /******/ ]);
