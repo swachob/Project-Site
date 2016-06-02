@@ -1,14 +1,7 @@
 .todo-container {
-  position: relative;
   width: 500px;
   margin: 5px auto;
-  left: 50%;
-  margin-left: -250px;
-  margin-top: 10px;
-}
-
-.todo-container {
-  font-family: 'Alegreya', serif;
+  margin-top: 20px;
 }
 
 .add-todo-container {
@@ -16,17 +9,16 @@
 }
 
 .add-todo-container .col-md-10 {
-  padding-left: 0;
+  padding: 0;
 }
 
 .add-todo-container .col-md-2 {
-  padding-left: 0;
+  padding-right: 0;
   text-align: right;
 }
 
 h1 {
-  color: black;
-  font-family: helvetica;
+  color: red;
 }
 
 .square {
@@ -36,14 +28,14 @@ h1 {
   background-color: #63a1f2;
   text-align: center;
   line-height: 100px;
-  font-family: helvetica;
+  font-family: arial;
   font-size: 42px;
   transform: none;
   transition: transform .5s;
 }
 
 .square-container {
-  perspective: 150px;
+  perspective: 50px;
   display: inline-block;
 }
 
@@ -69,24 +61,12 @@ h1 {
 
 .square5:hover {
   -webkit-transform: rotateX(45deg);
-  perspective: rotateX(45deg);
+  transform: rotateX(45deg);
   transition: transform .5s;
 }
 
 .square6:hover {
   transform: translate3d(20px, 50px, 100px);
-}
-
-body {
-  font-family: Monospace;
-  background-color: #f0f0f0;
-  margin: 0px;
-  overflow: hidden;
-}
-
-video {
-  height: 240px;
-  width: 320px;
 }
 
 /*# sourceMappingURL=main.css.map*/

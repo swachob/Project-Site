@@ -68,9 +68,9 @@ var app = {
     $checkboxes.on('change', function(){
       var wasChecked = $(this).is(':checked');
       if (!wasChecked) {
-        $(this).parent().parent().removeClass('disabled');
+        $(this).parent().parent().removeClass("disabled");
       } else {
-        $(this).parent().parent().addClass('disabled');
+        $(this).parent().parent().addClass("disabled");
       }
     });
   },
@@ -85,7 +85,7 @@ var app = {
           completed: false 
         };
         todos.push(newTodoObject);
-        $container.find('input').val('');
+        $container.find('input').val("");
         app.render(); 
       }
     });

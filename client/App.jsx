@@ -4,9 +4,6 @@ import 'styles/main.scss';
 import todos from 'pages/todo';
 import project from 'pages/project';
 import funnySquares from 'pages/funnySquares';
-import canvasAscii from 'pages/canvasAscii';
-import header from 'components/header';
-
 
 $(function(){
 
