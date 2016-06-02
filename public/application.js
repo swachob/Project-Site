@@ -9970,7 +9970,7 @@
 	  }
 	});
 	
-	var todoModel = new TodoModel();
+	todoModel = new TodoModel();
 	
 	// View
 	
@@ -9985,7 +9985,7 @@
 	
 	});
 	
-	var todoControllerView = new TodoControllerView();
+	todoControllerView = new TodoControllerView();
 	
 	module.exports = todoControllerView;
 

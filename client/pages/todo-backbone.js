@@ -33,7 +33,7 @@ TodoModel = Backbone.Model.extend({
   }
 });
 
-var todoModel = new TodoModel();
+todoModel = new TodoModel();
 
 // View
 
@@ -49,7 +49,7 @@ TodoControllerView = Backbone.View.extend({
 
 });
 
-var todoControllerView = new TodoControllerView();
+todoControllerView = new TodoControllerView();
 
 module.exports = todoControllerView;
 
