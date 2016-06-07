@@ -4,8 +4,12 @@ import 'styles/main.scss';
 import todos from 'pages/todo-backbone';
 import project from 'pages/project';
 import funnySquares from 'pages/funnySquares';
+import formsBackbone from 'pages/formsBackbone';
+import header from 'components/header';
 
 $(function(){
+
+  header.init();
 
   // what page are we on?
   var url = window.location.pathname;
@@ -21,6 +25,10 @@ $(function(){
     case '/pages/funnySquares.html':
       funnySquares.init();
     break;
+    case '/pages/formsBackbone.html':
+      formsBackbone.render();
+    break;
+    default: break;
   }
 
 });
