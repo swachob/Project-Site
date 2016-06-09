@@ -9925,7 +9925,7 @@
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
-	module.exports = {"todo-container":"todo-container","add-todo-container":"add-todo-container","col-md-10":"col-md-10","col-md-2":"col-md-2","square":"square","square-container":"square-container","square1":"square1","square2":"square2","square3":"square3","square4":"square4","square5":"square5","square6":"square6","page-container":"page-container"};
+	module.exports = {"todo-container":"todo-container","add-todo-container":"add-todo-container","col-md-10":"col-md-10","col-md-2":"col-md-2","button":"button","button-text":"button-text","square":"square","square-container":"square-container","square1":"square1","square2":"square2","square3":"square3","square4":"square4","square5":"square5","square6":"square6","page-container":"page-container"};
 
 /***/ },
 /* 3 */,
@@ -21344,7 +21344,7 @@
 /* 59 */
 /***/ function(module, exports) {
 
-	module.exports = "<form>\n\t\n\t<label for=\"name-field\">Name</label>\n\t<input class=\"form-control\" type=\"text\" id=\"name-field\">\n\n</form>\n\n<button class=\"btn btn-primary-outline btn-done\">Done</button>";
+	module.exports = "<form>\n\t\n\t<label for=\"name-field\">Name</label>\n\t<input class=\"form-control\" type=\"text\" id=\"name-field\">\n\n</form>\n<button class=\"btn btn-primary-outline btn-done\">Done</button>";
 
 /***/ }
 /******/ ]);
