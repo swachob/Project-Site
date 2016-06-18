@@ -5,7 +5,7 @@ var $ = require('jquery');
 window.jQuery = window.$ = $;
 require('bootstrap');
 
-import _ from 'underscore';
+// import _ from 'underscore';
 import Backbone from 'backbone';
 import Handlebars from 'handlebars';
 import lscache from 'lscache';
@@ -75,7 +75,7 @@ var ListView = Backbone.View.extend(listViewConfig);
 
 var createViewConfig = {
   tagName: 'div',
-  template: Handlebars.compile(createTemplate),
+  template: Handlebars.compile(createAccount),
   events: {
     'click .btn-done': 'submitForm'
   },
@@ -93,4 +93,5 @@ var createViewConfig = {
 var CreateView = Backbone.View.extend(createViewConfig);
 
 var accountControllerView = new AccountControllerView();
+
 module.exports = accountControllerView;

@@ -54,29 +54,31 @@
 	
 	__webpack_require__(2);
 	
-	var _pagesTodoBackbone = __webpack_require__(6);
+	var _pagesTodoTodoController = __webpack_require__(6);
 	
-	var _pagesTodoBackbone2 = _interopRequireDefault(_pagesTodoBackbone);
+	var _pagesTodoTodoController2 = _interopRequireDefault(_pagesTodoTodoController);
 	
-	var _pagesProject = __webpack_require__(54);
+	var _pagesProject = __webpack_require__(56);
 	
 	var _pagesProject2 = _interopRequireDefault(_pagesProject);
 	
-	var _pagesFunnySquares = __webpack_require__(55);
+	var _pagesPhotoSearch = __webpack_require__(57);
+	
+	var _pagesPhotoSearch2 = _interopRequireDefault(_pagesPhotoSearch);
+	
+	var _pagesFunnySquares = __webpack_require__(58);
 	
 	var _pagesFunnySquares2 = _interopRequireDefault(_pagesFunnySquares);
 	
-	var _pagesFormsBackbone = __webpack_require__(57);
+	var _pagesFormsBackbone = __webpack_require__(60);
 	
 	var _pagesFormsBackbone2 = _interopRequireDefault(_pagesFormsBackbone);
 	
-	var _componentsHeader = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"components/header\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
-	
-	var _componentsHeader2 = _interopRequireDefault(_componentsHeader);
+	// import header from 'components/header';
 	
 	(0, _jquery2['default'])(function () {
 	
-	  _componentsHeader2['default'].init();
+	  // header.init();
 	
 	  // what page are we on?
 	  var url = window.location.pathname;
@@ -84,10 +86,13 @@
 	  // our first javascript router
 	  switch (url) {
 	    case '/pages/todo.html':
-	      _pagesTodoBackbone2['default'].render();
+	      var todoControllerView = new _pagesTodoTodoController2['default']();
 	      break;
 	    case '/pages/project.html':
 	      // init the project javascript
+	      break;
+	    case '/pages/photoSearch.html':
+	      _pagesPhotoSearch2['default'].init();
 	      break;
 	    case '/pages/funnySquares.html':
 	      _pagesFunnySquares2['default'].init();
@@ -9925,7 +9930,7 @@
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
-	module.exports = {"todo-container":"todo-container","add-todo-container":"add-todo-container","col-sm-10":"col-sm-10","col-sm-2":"col-sm-2","button":"button","button-text":"button-text","square":"square","square-container":"square-container","square1":"square1","square2":"square2","square3":"square3","square4":"square4","square5":"square5","square6":"square6","page-container":"page-container"};
+	module.exports = {"todo-container":"todo-container","add-todo-container":"add-todo-container","col-sm-10":"col-sm-10","col-sm-2":"col-sm-2","square":"square","square-container":"square-container","square1":"square1","square2":"square2","square3":"square3","square4":"square4","square5":"square5","square6":"square6","page-container":"page-container","search-container":"search-container","photo":"photo"};
 
 /***/ },
 /* 3 */,
@@ -9938,10 +9943,6 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 	
-	var _underscore = __webpack_require__(7);
-	
-	var _underscore2 = _interopRequireDefault(_underscore);
-	
 	var _backbone = __webpack_require__(8);
 	
 	var _backbone2 = _interopRequireDefault(_backbone);
@@ -9950,110 +9951,36 @@
 	
 	var _handlebars2 = _interopRequireDefault(_handlebars);
 	
-	var _lscache = __webpack_require__(39);
+	var _pagesTodoTodoModel = __webpack_require__(39);
 	
-	var _lscache2 = _interopRequireDefault(_lscache);
+	var _pagesTodoTodoModel2 = _interopRequireDefault(_pagesTodoTodoModel);
 	
-	var _templatesTodoItemHtml = __webpack_require__(40);
+	var _pagesTodoTodoView = __webpack_require__(54);
 	
-	var _templatesTodoItemHtml2 = _interopRequireDefault(_templatesTodoItemHtml);
+	var _pagesTodoTodoView2 = _interopRequireDefault(_pagesTodoTodoView);
 	
-	// Backbone Todo App
+	// Controller View
 	
 	var $ = __webpack_require__(1);
 	
-	// legacy loading for bootstrap
-	window.jQuery = window.$ = $;
-	__webpack_require__(41);
-	
-	var TodoModel;
-	var TodoControllerView; // class
-	var TodoView;
-	var TodoItemView;
-	
-	var todoModel;
-	var todoControllerView; //instance
-	
-	// Model
-	
-	TodoModel = _backbone2['default'].Model.extend({
-	  defaults: {
-	    todos: []
-	  },
-	  todoSchema: {
-	    id: 0,
-	    title: '',
-	    completed: false
-	  },
-	  fetch: function fetch() {
-	    var data = _lscache2['default'].get('todos');
-	    data = this.applySchema(data);
-	    this.set('todos', data);
-	  },
-	  save: function save() {
-	    var data = this.get('todos');
-	    data = this.applySchema(data);
-	    _lscache2['default'].set('todos', data);
-	  },
-	  applySchema: function applySchema(todos) {
-	    var data = todos;
-	    var schema = this.todoSchema;
-	    data = _underscore2['default'].isArray(todos) ? data : [];
-	    data = data.map(function (todo, index) {
-	      todo.id = index;
-	      return _underscore2['default'].defaults(todo, schema);
-	    });
-	    return data;
-	  },
-	  addItem: function addItem(newTitle) {
-	    var newTodo = { title: newTitle };
-	    var todos = this.get('todos');
-	    todos.push(newTodo);
-	    this.set('todos', todos);
-	    this.save();
-	  },
-	  removeItem: function removeItem(id) {
-	    // finally removes the damn thing
-	    var todos = this.get('todos');
-	    todos.splice(id, 1);
-	    this.save();
-	  },
-	  itemCompleted: function itemCompleted(id, isCompleted) {
-	    var todos = this.get('todos');
-	    var item = _underscore2['default'].findWhere(todos, { id: id });
-	    item.completed = isCompleted;
-	    this.set('todos', todos);
-	    this.save();
-	  },
-	  editTitle: function editTitle(newTitle, id) {
-	    var todos = this.get('todos');
-	    var item = _underscore2['default'].findWhere(todos, { id: id });
-	    item.title = newTitle;
-	    this.set('todos', todos);
-	    this.save();
-	  }
-	});
-	
-	todoModel = new TodoModel();
-	
-	// View
-	
-	TodoControllerView = _backbone2['default'].View.extend({
+	var TodoControllerView = _backbone2['default'].View.extend({
 	  el: '.todo-container',
-	  model: todoModel,
+	  model: _pagesTodoTodoModel2['default'],
 	  events: {
 	    'click .btn-add': 'addTodoItem'
 	  },
 	  initialize: function initialize() {
 	    this.model.fetch();
+	    this.model.on('change', this.render, this);
 	  },
 	  render: function render() {
 	    // render the todo items
 	    var todos = this.model.get('todos');
-	    var $ul = this.$el.find('ul');
+	    var $ul = this.$el.find('.list-group');
 	    $ul.html('');
+	    var controller = this;
 	    todos.map(function (todo) {
-	      var view = new TodoItemView(todo);
+	      var view = new _pagesTodoTodoView2['default'](todo, this);
 	      $ul.append(view.$el);
 	    });
 	  },
@@ -10081,52 +10008,7 @@
 	  }
 	});
 	
-	TodoItemView = _backbone2['default'].View.extend({
-	  tagName: 'li', // el = <li></li>
-	  className: 'list-group-item row',
-	  events: {
-	    'click .close': 'removeItem',
-	    'change .completed-checkbox': 'completedClicked',
-	    'click .title': 'titleClicked',
-	    'keypress .title-edit-input': 'titleEditConfirm'
-	  },
-	  template: _handlebars2['default'].compile(_templatesTodoItemHtml2['default']),
-	  initialize: function initialize(todo) {
-	    this.data = todo;
-	    this.render();
-	  },
-	  render: function render(todo) {
-	    this.$el.html(this.template(this.data));
-	    this.$title = this.$el.find('.title');
-	    this.$titleEdit = this.$el.find('.title-edit');
-	    this.$titleInput = this.$titleEdit.find('.title-edit-input'); // using titleEdit instead of el b/c t-e-i is within title-edit
-	    this.$el.toggleClass('disabled', this.data.completed);
-	  },
-	  removeItem: function removeItem() {
-	    todoControllerView.removeItem(this.data.id);
-	  },
-	  completedClicked: function completedClicked(event) {
-	    var isChecked = $(event.currentTarget).is(':checked');
-	    todoControllerView.itemCompleted(this.data.id, isChecked);
-	  },
-	  titleClicked: function titleClicked() {
-	    this.$title.addClass('hidden');
-	    this.$titleEdit.removeClass('hidden');
-	    this.$titleInput.focus();
-	    // this.$title.add(this.$titleEdit).toggleClass('hidden')
-	  },
-	  titleEditConfirm: function titleEditConfirm(event) {
-	    if (event.which === 13) {
-	      // they hit the enter key
-	      var newTitle = this.$titleInput.val();
-	      todoControllerView.titleEdit(newTitle, this.data.id);
-	    }
-	  }
-	});
-	
-	todoControllerView = new TodoControllerView();
-	
-	module.exports = todoControllerView;
+	module.exports = TodoControllerView;
 
 /***/ },
 /* 7 */
@@ -18399,6 +18281,112 @@
 /* 39 */
 /***/ function(module, exports, __webpack_require__) {
 
+	'use strict';
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+	
+	var _underscore = __webpack_require__(7);
+	
+	var _underscore2 = _interopRequireDefault(_underscore);
+	
+	var _backbone = __webpack_require__(8);
+	
+	var _backbone2 = _interopRequireDefault(_backbone);
+	
+	// import lscache from 'lscache';
+	
+	// Model
+	
+	var $ = __webpack_require__(1);
+	
+	// legacy loading for bootstrap
+	window.jQuery = window.$ = $;
+	__webpack_require__(41);
+	
+	var TodoModel = _backbone2['default'].Model.extend({
+	  defaults: {
+	    todos: []
+	  },
+	  todoSchema: {
+	    id: 0,
+	    title: '',
+	    completed: false
+	  },
+	  fetch: function fetch() {
+	    var that = this;
+	    $.ajax({
+	      url: '/api',
+	      method: 'GET',
+	      complete: function complete(response) {
+	        var dataString = response.responseText;
+	        var data = JSON.parse(dataString);
+	        data = that.applySchema(data);
+	        that.set('todos', data);
+	      }
+	    });
+	  },
+	  save: function save() {
+	    var that = this;
+	    var todos = this.get('todos');
+	    $.ajax({
+	      url: '/api',
+	      method: 'POST',
+	      data: { todos: JSON.stringify(todos) },
+	      complete: function complete(response) {
+	        var dataString = response.responseText;
+	        var data = JSON.parse(dataString);
+	        data = that.applySchema(data);
+	        that.set('todos', data);
+	      }
+	    });
+	  },
+	  applySchema: function applySchema(todos) {
+	    var data = todos;
+	    var schema = this.todoSchema;
+	    data = _underscore2['default'].isArray(todos) ? data : [];
+	    data = data.map(function (todo, index) {
+	      todo.id = index;
+	      return _underscore2['default'].defaults(todo, schema);
+	    });
+	    return data;
+	  },
+	  addItem: function addItem(newTitle) {
+	    var newTodo = { title: newTitle };
+	    var todos = this.get('todos');
+	    todos.push(newTodo);
+	    this.set('todos', todos);
+	    this.save();
+	  },
+	  removeItem: function removeItem(id) {
+	    // finally removes the damn thing
+	    var todos = this.get('todos');
+	    todos.splice(id, 1);
+	    this.save();
+	  },
+	  itemCompleted: function itemCompleted(id, isCompleted) {
+	    var todos = this.get('todos');
+	    var item = _underscore2['default'].findWhere(todos, { id: id });
+	    item.completed = isCompleted;
+	    this.set('todos', todos);
+	    this.save();
+	  },
+	  editTitle: function editTitle(newTitle, id) {
+	    var todos = this.get('todos');
+	    var item = _underscore2['default'].findWhere(todos, { id: id });
+	    item.title = newTitle;
+	    this.set('todos', todos);
+	    this.save();
+	  }
+	});
+	
+	var todoModel = new TodoModel();
+	
+	module.exports = todoModel;
+
+/***/ },
+/* 40 */
+/***/ function(module, exports, __webpack_require__) {
+
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/**
 	 * lscache library
 	 * Copyright (c) 2011, Pamela Fox
@@ -18750,12 +18738,6 @@
 	  return lscache;
 	}));
 
-
-/***/ },
-/* 40 */
-/***/ function(module, exports) {
-
-	module.exports = "<div class=\"col-sm-1\">\n  <input class=\"completed-checkbox\" type=\"checkbox\" {{#if completed}}checked{{/if}}>\n</div>\n<div class=\"col-sm-10 title\">{{title}}</div>\n<div class=\"col-sm-10 title-edit hidden\">\n  <input type=\"text\" class=\"form-control title-edit-input\" value=\"{{title}}\">\n</div>\n<div class=\"col-sm-1\">\n  <button type=\"button\" class=\"close\" aria-label=\"Close\">\n    <span aria-hidden=\"true\">&times;</span>\n  </button>\n</div>\n";
 
 /***/ },
 /* 41 */
@@ -21189,17 +21171,17 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 	
-	var _underscore = __webpack_require__(7);
+	var _backbone = __webpack_require__(8);
 	
-	var _underscore2 = _interopRequireDefault(_underscore);
+	var _backbone2 = _interopRequireDefault(_backbone);
 	
 	var _handlebars = __webpack_require__(9);
 	
 	var _handlebars2 = _interopRequireDefault(_handlebars);
 	
-	var _lscache = __webpack_require__(39);
+	var _templatesTodoItemHtml = __webpack_require__(55);
 	
-	var _lscache2 = _interopRequireDefault(_lscache);
+	var _templatesTodoItemHtml2 = _interopRequireDefault(_templatesTodoItemHtml);
 	
 	var $ = __webpack_require__(1);
 	
@@ -21207,14 +21189,159 @@
 	window.jQuery = window.$ = $;
 	__webpack_require__(41);
 	
-	var ProjectModel;
-	var PageView;
+	var TodoItemView = _backbone2['default'].View.extend({
+	  tagName: 'li', // el = <li></li>
+	  className: 'list-group-item row',
+	  events: {
+	    'click .close': 'removeItem',
+	    'change .completed-checkbox': 'completedClicked',
+	    'click .title': 'titleClicked',
+	    'keypress .title-edit-input': 'titleEditConfirm'
+	  },
+	  template: _handlebars2['default'].compile(_templatesTodoItemHtml2['default']),
+	  initialize: function initialize(todo, controller) {
+	    this.controller = controller;
+	    this.data = todo;
+	    this.render();
+	  },
+	  render: function render() {
+	    this.$el.html(this.template(this.data));
+	    this.$title = this.$el.find('.title');
+	    this.$titleEdit = this.$el.find('.title-edit');
+	    this.$titleInput = this.$titleEdit.find('.title-edit-input'); // using titleEdit instead of el b/c t-e-i is within title-edit
+	    this.$el.toggleClass('disabled', this.data.completed);
+	  },
+	  removeItem: function removeItem() {
+	    this.controller.removeItem(this.data.id);
+	  },
+	  completedClicked: function completedClicked(event) {
+	    var isChecked = $(event.currentTarget).is(':checked');
+	    this.controller.itemCompleted(this.data.id, isChecked);
+	  },
+	  titleClicked: function titleClicked() {
+	    this.$title.addClass('hidden');
+	    this.$titleEdit.removeClass('hidden');
+	    this.$titleInput.focus();
+	    // this.$title.add(this.$titleEdit).toggleClass('hidden')
+	  },
+	  titleEditConfirm: function titleEditConfirm(event) {
+	    if (event.which === 13) {
+	      // they hit the enter key
+	      var newTitle = this.$titleInput.val();
+	      this.controller.titleEdit(newTitle, this.data.id);
+	    }
+	  }
+	});
 	
-	var app = {};
-	module.exports = app;
+	module.exports = TodoItemView;
 
 /***/ },
 /* 55 */
+/***/ function(module, exports) {
+
+	module.exports = "<div class=\"col-sm-1\">\n  {{#if completed}}\n    <input class=\"completed-checkbox\" type=\"checkbox\" checked>\n  {{else}}\n    <input class=\"completed-checkbox\" type=\"checkbox\">\n  {{/if}}  \n</div>\n<div class=\"col-sm-10 title\">{{title}}</div>\n<div class=\"col-sm-10 title-edit hidden\">\n  <input type=\"text\" class=\"form-control title-edit-input\" value=\"{{title}}\">\n</div>\n<div class=\"col-sm-2\">\n  <button type=\"button\" class=\"close\" aria-label=\"Close\">\n    <span aria-hidden=\"true\">&times;</span>\n  </button>\n</div>\n";
+
+/***/ },
+/* 56 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	// var $ = require('jquery');
+
+	// // legacy loading for bootstrap
+	// window.jQuery = window.$ = $;
+	// require('bootstrap');
+
+	// import _ from 'underscore';
+	// import Handlebars from 'handlebars';
+	// import lscache from 'lscache';
+
+	// function myFunction() {
+	//   document.getElementById("myDropdown").classList.toggle("show");
+	// }
+
+	// // Close the dropdown menu if the user clicks outside of it
+	// window.onclick = function(event) {
+	//   if (!event.target.matches('.dropbtn')) {
+
+	//     var dropdowns = document.getElementsByClassName("dropdown-content");
+	//     var i;
+	//     for (i = 0; i < dropdowns.length; i++) {
+	//       var openDropdown = dropdowns[i];
+	//       if (openDropdown.classList.contains('show')) {
+	//         openDropdown.classList.remove('show');
+	//       }
+	//     }
+	//   }
+	// var app = {}
+	// };
+	// module.exports = app;
+
+/***/ },
+/* 57 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	// var compiledTemplate = Handlebars.compile(photoTemplate);
+
+	// var app = {
+	//   init: function(){
+	//     app.render();
+	//   },
+	//   render: function(){
+	//     app.$input = ('.search-container input');
+	//     app.bindEvents();
+	//   },
+	//   bindEvents: function(){
+	//     app.$input.on('keypress', app.searchKeypress);
+	//   },
+	//   searchKeypress: function(event){
+	//     if (event.which === 13) {
+	//       app.doSearch();
+	//     }
+	//   },
+	//   doSearch: function(){
+	//     var phrase = app.$input.val();
+	//     $.ajax({
+	//       url: 'https://api.flickr.com/services/rest',
+	//       method: 'GET',
+	//       data: {
+	//         text: phrase,
+	//         method: 'flickr.photos.search',
+	//         api_key: '731717db25329eb6aa65703cb6b71970',
+	//         format: 'json',
+	//         per_page: 30
+	//       },
+	//       complete: function(response){
+	//         var text = response.responseText;
+	//         text = text.slice(14, text.length - 1);
+	//         var data = JSON.parse(text);
+	//         if (data) {
+	//           app.renderResults(data);
+	//         } else {
+	//           // error!!!
+	//         }
+	//       }
+	//     });
+	//   },
+	//   renderResults: function(data){
+	//     // pass data to the template
+	//     var html = '';
+	//     var myPhotos = data.photos.photo;
+	//     myPhotos.forEach(function(item){
+	//       html = html + compiledTemplate(item);
+	//     });
+	//     // append result to the .search-result div
+	//     $('.search-results').html(html);
+	//   }
+	// };
+
+	// module.exports = app;
+
+/***/ },
+/* 58 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -21229,7 +21356,7 @@
 	
 	var _underscore2 = _interopRequireDefault(_underscore);
 	
-	var _templatesFunnySquareHtml = __webpack_require__(56);
+	var _templatesFunnySquareHtml = __webpack_require__(59);
 	
 	var _templatesFunnySquareHtml2 = _interopRequireDefault(_templatesFunnySquareHtml);
 	
@@ -21257,22 +21384,20 @@
 	module.exports = app;
 
 /***/ },
-/* 56 */
+/* 59 */
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"square-container\">\n  <div class=\"square square{{id}}\">\n    <div class=\"inner\">{{id}}</div>\n  </div>\n</div>";
 
 /***/ },
-/* 57 */
+/* 60 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 	
-	var _underscore = __webpack_require__(7);
-	
-	var _underscore2 = _interopRequireDefault(_underscore);
+	// import _ from 'underscore';
 	
 	var _backbone = __webpack_require__(8);
 	
@@ -21282,15 +21407,15 @@
 	
 	var _handlebars2 = _interopRequireDefault(_handlebars);
 	
-	var _lscache = __webpack_require__(39);
+	var _lscache = __webpack_require__(40);
 	
 	var _lscache2 = _interopRequireDefault(_lscache);
 	
-	var _templatesAccountListHtml = __webpack_require__(58);
+	var _templatesAccountListHtml = __webpack_require__(61);
 	
 	var _templatesAccountListHtml2 = _interopRequireDefault(_templatesAccountListHtml);
 	
-	var _templatesCreateAccountHtml = __webpack_require__(59);
+	var _templatesCreateAccountHtml = __webpack_require__(62);
 	
 	var _templatesCreateAccountHtml2 = _interopRequireDefault(_templatesCreateAccountHtml);
 	
@@ -21300,9 +21425,7 @@
 	
 	// legacy loading for bootstrap
 	window.jQuery = window.$ = $;
-	__webpack_require__(41);
-	
-	var accountModelConfigObject = {
+	__webpack_require__(41);var accountModelConfigObject = {
 	  defaults: {
 	    accounts: []
 	  },
@@ -21361,7 +21484,7 @@
 	
 	var createViewConfig = {
 	  tagName: 'div',
-	  template: _handlebars2['default'].compile(createTemplate),
+	  template: _handlebars2['default'].compile(_templatesCreateAccountHtml2['default']),
 	  events: {
 	    'click .btn-done': 'submitForm'
 	  },
@@ -21379,16 +21502,17 @@
 	var CreateView = _backbone2['default'].View.extend(createViewConfig);
 	
 	var accountControllerView = new AccountControllerView();
+	
 	module.exports = accountControllerView;
 
 /***/ },
-/* 58 */
+/* 61 */
 /***/ function(module, exports) {
 
 	module.exports = "<table class=\"table table-striped table-bordered table-hover\">\n  <tr>\n    <th>number</th>\n  </tr>\n  <tr>\n    <td>1</td>\n  </tr>\n  <tr>\n    <td>2</td>s\n  </tr>\n  </table>";
 
 /***/ },
-/* 59 */
+/* 62 */
 /***/ function(module, exports) {
 
 	module.exports = "<form>\n\t\n\t<label for=\"name-field\">Name</label>\n\t<input class=\"form-control\" type=\"text\" id=\"name-field\">\n\n</form>\n<button class=\"btn btn-primary-outline btn-done\">Done</button>";
