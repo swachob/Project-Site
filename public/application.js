@@ -54,21 +54,21 @@
 	
 	__webpack_require__(2);
 	
-	var _pagesTodoReactTodoListView = __webpack_require__(219);
+	var _pagesTodoReactTodoListView = __webpack_require__(6);
 	
 	var _pagesTodoReactTodoListView2 = _interopRequireDefault(_pagesTodoReactTodoListView);
 	
 	// import project from 'pages/project';
 	
-	var _pagesPhotoSearch = __webpack_require__(182);
+	var _pagesPhotoSearch = __webpack_require__(183);
 	
 	var _pagesPhotoSearch2 = _interopRequireDefault(_pagesPhotoSearch);
 	
-	var _pagesFunnySquares = __webpack_require__(183);
+	var _pagesFunnySquares = __webpack_require__(184);
 	
 	var _pagesFunnySquares2 = _interopRequireDefault(_pagesFunnySquares);
 	
-	var _pagesFormsBackbone = __webpack_require__(215);
+	var _pagesFormsBackbone = __webpack_require__(216);
 	
 	var _pagesFormsBackbone2 = _interopRequireDefault(_pagesFormsBackbone);
 	
@@ -9934,7 +9934,72 @@
 /* 3 */,
 /* 4 */,
 /* 5 */,
-/* 6 */,
+/* 6 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+	
+	var _react = __webpack_require__(7);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactDom = __webpack_require__(164);
+	
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+	
+	var _backbone = __webpack_require__(165);
+	
+	var _backbone2 = _interopRequireDefault(_backbone);
+	
+	var _pagesTodoReactTodoModel = __webpack_require__(167);
+	
+	var _pagesTodoReactTodoModel2 = _interopRequireDefault(_pagesTodoReactTodoModel);
+	
+	var _pagesTodoReactTodoView = __webpack_require__(181);
+	
+	var _pagesTodoReactTodoView2 = _interopRequireDefault(_pagesTodoReactTodoView);
+	
+	var _pagesTodoReactTodoDispatcher = __webpack_require__(182);
+	
+	var _pagesTodoReactTodoDispatcher2 = _interopRequireDefault(_pagesTodoReactTodoDispatcher);
+	
+	var $ = __webpack_require__(1);
+	
+	var TodoListView = _backbone2['default'].View.extend({
+	  el: '.todo-container',
+	  model: _pagesTodoReactTodoModel2['default'],
+	  events: {
+	    'click .btn-add': 'addTodoItem'
+	  },
+	  initialize: function initialize() {
+	    this.model.fetch();
+	    this.model.on('change', this.render, this);
+	  },
+	  render: function render() {
+	    // render the todo items
+	    var todos = this.model.get('todos');
+	    var $ul = this.$el.find('.list-group');
+	    $ul.html('');
+	    todos.forEach(function (todo) {
+	      var $li = $('<li class="list-group-item row"></li>');
+	      $ul.append($li);
+	      _reactDom2['default'].render(_react2['default'].createElement(_pagesTodoReactTodoView2['default'], { data: todo }), $li[0] // react does not recognize jQuery selector, get original DOMnode from jQuery object
+	      );
+	    });
+	  },
+	  addTodoItem: function addTodoItem() {
+	    var $input = this.$el.find('.input-name');
+	    var newTitle = $input.val();
+	    _pagesTodoReactTodoDispatcher2['default'].addTodo(newTitle);
+	    $input.val('');
+	  }
+	});
+	
+	module.exports = TodoListView;
+
+/***/ },
 /* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -35574,7 +35639,7 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _todoDispatcher = __webpack_require__(220);
+	var _todoDispatcher = __webpack_require__(182);
 	
 	var _todoDispatcher2 = _interopRequireDefault(_todoDispatcher);
 	
@@ -35641,11 +35706,9 @@
 	    _todoDispatcher2['default'].startEditMode(id);
 	  },
 	  editKeyPress: function editKeyPress(event) {
-	    if (event.which === 13) {
-	      var id = this.props.data.id;
-	      var newTitle = (0, _jquery2['default'])('li').eq(id).find('input[type="text"]').val();
-	      _todoDispatcher2['default'].editTodoTitle(id, newTitle);
-	    }
+	    var id = this.props.data.id;
+	    var newTitle = (0, _jquery2['default'])('li').eq(id).find('input[type="text"]').val();
+	    _todoDispatcher2['default'].editTodoTitle(id, newTitle, event);
 	  }
 	});
 	
@@ -35653,6 +35716,42 @@
 
 /***/ },
 /* 182 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+	
+	var _todoModel = __webpack_require__(167);
+	
+	var _todoModel2 = _interopRequireDefault(_todoModel);
+	
+	var dispatcher = {
+	  clickComplete: function clickComplete(id) {
+	    _todoModel2['default'].itemCompleted(id);
+	  },
+	  addTodo: function addTodo(title) {
+	    if (title !== '' && typeof title === 'string') {
+	      _todoModel2['default'].addItem(title);
+	    }
+	  },
+	  removeTodo: function removeTodo(id) {
+	    _todoModel2['default'].removeItem(id);
+	  },
+	  editTodoTitle: function editTodoTitle(id, title, event) {
+	    if (event.which === 13 && typeof title === 'string' && title.length > 0) {
+	      _todoModel2['default'].editTitle(id, title);
+	    }
+	  },
+	  startEditMode: function startEditMode(id) {
+	    _todoModel2['default'].startEditing(id);
+	  }
+	};
+	
+	module.exports = dispatcher;
+
+/***/ },
+/* 183 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -35714,7 +35813,7 @@
 	// module.exports = app;
 
 /***/ },
-/* 183 */
+/* 184 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35729,11 +35828,11 @@
 	
 	var _underscore2 = _interopRequireDefault(_underscore);
 	
-	var _templatesFunnySquareHtml = __webpack_require__(184);
+	var _templatesFunnySquareHtml = __webpack_require__(185);
 	
 	var _templatesFunnySquareHtml2 = _interopRequireDefault(_templatesFunnySquareHtml);
 	
-	var _handlebars = __webpack_require__(185);
+	var _handlebars = __webpack_require__(186);
 	
 	var _handlebars2 = _interopRequireDefault(_handlebars);
 	
@@ -35757,13 +35856,13 @@
 	module.exports = app;
 
 /***/ },
-/* 184 */
+/* 185 */
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"square-container\">\n  <div class=\"square square{{id}}\">\n    <div class=\"inner\">{{id}}</div>\n  </div>\n</div>";
 
 /***/ },
-/* 185 */
+/* 186 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// USAGE:
@@ -35772,9 +35871,9 @@
 	
 	// var local = handlebars.create();
 	
-	var handlebars = __webpack_require__(186)['default'];
+	var handlebars = __webpack_require__(187)['default'];
 	
-	var printer = __webpack_require__(214);
+	var printer = __webpack_require__(215);
 	handlebars.PrintVisitor = printer.PrintVisitor;
 	handlebars.print = printer.print;
 	
@@ -35794,7 +35893,7 @@
 
 
 /***/ },
-/* 186 */
+/* 187 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35804,29 +35903,29 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 	
-	var _handlebarsRuntime = __webpack_require__(187);
+	var _handlebarsRuntime = __webpack_require__(188);
 	
 	var _handlebarsRuntime2 = _interopRequireDefault(_handlebarsRuntime);
 	
 	// Compiler imports
 	
-	var _handlebarsCompilerAst = __webpack_require__(205);
+	var _handlebarsCompilerAst = __webpack_require__(206);
 	
 	var _handlebarsCompilerAst2 = _interopRequireDefault(_handlebarsCompilerAst);
 	
-	var _handlebarsCompilerBase = __webpack_require__(206);
+	var _handlebarsCompilerBase = __webpack_require__(207);
 	
-	var _handlebarsCompilerCompiler = __webpack_require__(211);
+	var _handlebarsCompilerCompiler = __webpack_require__(212);
 	
-	var _handlebarsCompilerJavascriptCompiler = __webpack_require__(212);
+	var _handlebarsCompilerJavascriptCompiler = __webpack_require__(213);
 	
 	var _handlebarsCompilerJavascriptCompiler2 = _interopRequireDefault(_handlebarsCompilerJavascriptCompiler);
 	
-	var _handlebarsCompilerVisitor = __webpack_require__(209);
+	var _handlebarsCompilerVisitor = __webpack_require__(210);
 	
 	var _handlebarsCompilerVisitor2 = _interopRequireDefault(_handlebarsCompilerVisitor);
 	
-	var _handlebarsNoConflict = __webpack_require__(204);
+	var _handlebarsNoConflict = __webpack_require__(205);
 	
 	var _handlebarsNoConflict2 = _interopRequireDefault(_handlebarsNoConflict);
 	
@@ -35865,7 +35964,7 @@
 
 
 /***/ },
-/* 187 */
+/* 188 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35879,30 +35978,30 @@
 	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
 	
-	var _handlebarsBase = __webpack_require__(188);
+	var _handlebarsBase = __webpack_require__(189);
 	
 	var base = _interopRequireWildcard(_handlebarsBase);
 	
 	// Each of these augment the Handlebars object. No need to setup here.
 	// (This is done to easily share code between commonjs and browse envs)
 	
-	var _handlebarsSafeString = __webpack_require__(202);
+	var _handlebarsSafeString = __webpack_require__(203);
 	
 	var _handlebarsSafeString2 = _interopRequireDefault(_handlebarsSafeString);
 	
-	var _handlebarsException = __webpack_require__(190);
+	var _handlebarsException = __webpack_require__(191);
 	
 	var _handlebarsException2 = _interopRequireDefault(_handlebarsException);
 	
-	var _handlebarsUtils = __webpack_require__(189);
+	var _handlebarsUtils = __webpack_require__(190);
 	
 	var Utils = _interopRequireWildcard(_handlebarsUtils);
 	
-	var _handlebarsRuntime = __webpack_require__(203);
+	var _handlebarsRuntime = __webpack_require__(204);
 	
 	var runtime = _interopRequireWildcard(_handlebarsRuntime);
 	
-	var _handlebarsNoConflict = __webpack_require__(204);
+	var _handlebarsNoConflict = __webpack_require__(205);
 	
 	var _handlebarsNoConflict2 = _interopRequireDefault(_handlebarsNoConflict);
 	
@@ -35937,7 +36036,7 @@
 
 
 /***/ },
-/* 188 */
+/* 189 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35948,17 +36047,17 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 	
-	var _utils = __webpack_require__(189);
+	var _utils = __webpack_require__(190);
 	
-	var _exception = __webpack_require__(190);
+	var _exception = __webpack_require__(191);
 	
 	var _exception2 = _interopRequireDefault(_exception);
 	
-	var _helpers = __webpack_require__(191);
+	var _helpers = __webpack_require__(192);
 	
-	var _decorators = __webpack_require__(199);
+	var _decorators = __webpack_require__(200);
 	
-	var _logger = __webpack_require__(201);
+	var _logger = __webpack_require__(202);
 	
 	var _logger2 = _interopRequireDefault(_logger);
 	
@@ -36047,7 +36146,7 @@
 
 
 /***/ },
-/* 189 */
+/* 190 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -36177,7 +36276,7 @@
 
 
 /***/ },
-/* 190 */
+/* 191 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -36223,7 +36322,7 @@
 
 
 /***/ },
-/* 191 */
+/* 192 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36234,31 +36333,31 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 	
-	var _helpersBlockHelperMissing = __webpack_require__(192);
+	var _helpersBlockHelperMissing = __webpack_require__(193);
 	
 	var _helpersBlockHelperMissing2 = _interopRequireDefault(_helpersBlockHelperMissing);
 	
-	var _helpersEach = __webpack_require__(193);
+	var _helpersEach = __webpack_require__(194);
 	
 	var _helpersEach2 = _interopRequireDefault(_helpersEach);
 	
-	var _helpersHelperMissing = __webpack_require__(194);
+	var _helpersHelperMissing = __webpack_require__(195);
 	
 	var _helpersHelperMissing2 = _interopRequireDefault(_helpersHelperMissing);
 	
-	var _helpersIf = __webpack_require__(195);
+	var _helpersIf = __webpack_require__(196);
 	
 	var _helpersIf2 = _interopRequireDefault(_helpersIf);
 	
-	var _helpersLog = __webpack_require__(196);
+	var _helpersLog = __webpack_require__(197);
 	
 	var _helpersLog2 = _interopRequireDefault(_helpersLog);
 	
-	var _helpersLookup = __webpack_require__(197);
+	var _helpersLookup = __webpack_require__(198);
 	
 	var _helpersLookup2 = _interopRequireDefault(_helpersLookup);
 	
-	var _helpersWith = __webpack_require__(198);
+	var _helpersWith = __webpack_require__(199);
 	
 	var _helpersWith2 = _interopRequireDefault(_helpersWith);
 	
@@ -36275,14 +36374,14 @@
 
 
 /***/ },
-/* 192 */
+/* 193 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	exports.__esModule = true;
 	
-	var _utils = __webpack_require__(189);
+	var _utils = __webpack_require__(190);
 	
 	exports['default'] = function (instance) {
 	  instance.registerHelper('blockHelperMissing', function (context, options) {
@@ -36320,7 +36419,7 @@
 
 
 /***/ },
-/* 193 */
+/* 194 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36330,9 +36429,9 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 	
-	var _utils = __webpack_require__(189);
+	var _utils = __webpack_require__(190);
 	
-	var _exception = __webpack_require__(190);
+	var _exception = __webpack_require__(191);
 	
 	var _exception2 = _interopRequireDefault(_exception);
 	
@@ -36420,7 +36519,7 @@
 
 
 /***/ },
-/* 194 */
+/* 195 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36430,7 +36529,7 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 	
-	var _exception = __webpack_require__(190);
+	var _exception = __webpack_require__(191);
 	
 	var _exception2 = _interopRequireDefault(_exception);
 	
@@ -36451,14 +36550,14 @@
 
 
 /***/ },
-/* 195 */
+/* 196 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	exports.__esModule = true;
 	
-	var _utils = __webpack_require__(189);
+	var _utils = __webpack_require__(190);
 	
 	exports['default'] = function (instance) {
 	  instance.registerHelper('if', function (conditional, options) {
@@ -36486,7 +36585,7 @@
 
 
 /***/ },
-/* 196 */
+/* 197 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -36518,7 +36617,7 @@
 
 
 /***/ },
-/* 197 */
+/* 198 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -36536,14 +36635,14 @@
 
 
 /***/ },
-/* 198 */
+/* 199 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	exports.__esModule = true;
 	
-	var _utils = __webpack_require__(189);
+	var _utils = __webpack_require__(190);
 	
 	exports['default'] = function (instance) {
 	  instance.registerHelper('with', function (context, options) {
@@ -36575,7 +36674,7 @@
 
 
 /***/ },
-/* 199 */
+/* 200 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36586,7 +36685,7 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 	
-	var _decoratorsInline = __webpack_require__(200);
+	var _decoratorsInline = __webpack_require__(201);
 	
 	var _decoratorsInline2 = _interopRequireDefault(_decoratorsInline);
 	
@@ -36597,14 +36696,14 @@
 
 
 /***/ },
-/* 200 */
+/* 201 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	exports.__esModule = true;
 	
-	var _utils = __webpack_require__(189);
+	var _utils = __webpack_require__(190);
 	
 	exports['default'] = function (instance) {
 	  instance.registerDecorator('inline', function (fn, props, container, options) {
@@ -36632,14 +36731,14 @@
 
 
 /***/ },
-/* 201 */
+/* 202 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	exports.__esModule = true;
 	
-	var _utils = __webpack_require__(189);
+	var _utils = __webpack_require__(190);
 	
 	var logger = {
 	  methodMap: ['debug', 'info', 'warn', 'error'],
@@ -36685,7 +36784,7 @@
 
 
 /***/ },
-/* 202 */
+/* 203 */
 /***/ function(module, exports) {
 
 	// Build out our basic SafeString type
@@ -36706,7 +36805,7 @@
 
 
 /***/ },
-/* 203 */
+/* 204 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36726,15 +36825,15 @@
 	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
 	
-	var _utils = __webpack_require__(189);
+	var _utils = __webpack_require__(190);
 	
 	var Utils = _interopRequireWildcard(_utils);
 	
-	var _exception = __webpack_require__(190);
+	var _exception = __webpack_require__(191);
 	
 	var _exception2 = _interopRequireDefault(_exception);
 	
-	var _base = __webpack_require__(188);
+	var _base = __webpack_require__(189);
 	
 	function checkRevision(compilerInfo) {
 	  var compilerRevision = compilerInfo && compilerInfo[0] || 1,
@@ -37004,7 +37103,7 @@
 
 
 /***/ },
-/* 204 */
+/* 205 */
 /***/ function(module, exports) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/* global window */
@@ -37031,7 +37130,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 205 */
+/* 206 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -37068,7 +37167,7 @@
 
 
 /***/ },
-/* 206 */
+/* 207 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -37083,19 +37182,19 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 	
-	var _parser = __webpack_require__(207);
+	var _parser = __webpack_require__(208);
 	
 	var _parser2 = _interopRequireDefault(_parser);
 	
-	var _whitespaceControl = __webpack_require__(208);
+	var _whitespaceControl = __webpack_require__(209);
 	
 	var _whitespaceControl2 = _interopRequireDefault(_whitespaceControl);
 	
-	var _helpers = __webpack_require__(210);
+	var _helpers = __webpack_require__(211);
 	
 	var Helpers = _interopRequireWildcard(_helpers);
 	
-	var _utils = __webpack_require__(189);
+	var _utils = __webpack_require__(190);
 	
 	exports.parser = _parser2['default'];
 	
@@ -37122,7 +37221,7 @@
 
 
 /***/ },
-/* 207 */
+/* 208 */
 /***/ function(module, exports) {
 
 	/* istanbul ignore next */
@@ -37866,7 +37965,7 @@
 
 
 /***/ },
-/* 208 */
+/* 209 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -37876,7 +37975,7 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 	
-	var _visitor = __webpack_require__(209);
+	var _visitor = __webpack_require__(210);
 	
 	var _visitor2 = _interopRequireDefault(_visitor);
 	
@@ -38093,7 +38192,7 @@
 
 
 /***/ },
-/* 209 */
+/* 210 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -38103,7 +38202,7 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 	
-	var _exception = __webpack_require__(190);
+	var _exception = __webpack_require__(191);
 	
 	var _exception2 = _interopRequireDefault(_exception);
 	
@@ -38239,7 +38338,7 @@
 
 
 /***/ },
-/* 210 */
+/* 211 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -38259,7 +38358,7 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 	
-	var _exception = __webpack_require__(190);
+	var _exception = __webpack_require__(191);
 	
 	var _exception2 = _interopRequireDefault(_exception);
 	
@@ -38475,7 +38574,7 @@
 
 
 /***/ },
-/* 211 */
+/* 212 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* eslint-disable new-cap */
@@ -38490,13 +38589,13 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 	
-	var _exception = __webpack_require__(190);
+	var _exception = __webpack_require__(191);
 	
 	var _exception2 = _interopRequireDefault(_exception);
 	
-	var _utils = __webpack_require__(189);
+	var _utils = __webpack_require__(190);
 	
-	var _ast = __webpack_require__(205);
+	var _ast = __webpack_require__(206);
 	
 	var _ast2 = _interopRequireDefault(_ast);
 	
@@ -39053,7 +39152,7 @@
 
 
 /***/ },
-/* 212 */
+/* 213 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -39063,15 +39162,15 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 	
-	var _base = __webpack_require__(188);
+	var _base = __webpack_require__(189);
 	
-	var _exception = __webpack_require__(190);
+	var _exception = __webpack_require__(191);
 	
 	var _exception2 = _interopRequireDefault(_exception);
 	
-	var _utils = __webpack_require__(189);
+	var _utils = __webpack_require__(190);
 	
-	var _codeGen = __webpack_require__(213);
+	var _codeGen = __webpack_require__(214);
 	
 	var _codeGen2 = _interopRequireDefault(_codeGen);
 	
@@ -40185,7 +40284,7 @@
 
 
 /***/ },
-/* 213 */
+/* 214 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* global define */
@@ -40193,7 +40292,7 @@
 	
 	exports.__esModule = true;
 	
-	var _utils = __webpack_require__(189);
+	var _utils = __webpack_require__(190);
 	
 	var SourceNode = undefined;
 	
@@ -40357,7 +40456,7 @@
 
 
 /***/ },
-/* 214 */
+/* 215 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* eslint-disable new-cap */
@@ -40370,7 +40469,7 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 	
-	var _visitor = __webpack_require__(209);
+	var _visitor = __webpack_require__(210);
 	
 	var _visitor2 = _interopRequireDefault(_visitor);
 	
@@ -40549,7 +40648,7 @@
 
 
 /***/ },
-/* 215 */
+/* 216 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -40562,19 +40661,19 @@
 	
 	var _backbone2 = _interopRequireDefault(_backbone);
 	
-	var _handlebars = __webpack_require__(185);
+	var _handlebars = __webpack_require__(186);
 	
 	var _handlebars2 = _interopRequireDefault(_handlebars);
 	
-	var _lscache = __webpack_require__(216);
+	var _lscache = __webpack_require__(217);
 	
 	var _lscache2 = _interopRequireDefault(_lscache);
 	
-	var _templatesAccountListHtml = __webpack_require__(217);
+	var _templatesAccountListHtml = __webpack_require__(218);
 	
 	var _templatesAccountListHtml2 = _interopRequireDefault(_templatesAccountListHtml);
 	
-	var _templatesCreateAccountHtml = __webpack_require__(218);
+	var _templatesCreateAccountHtml = __webpack_require__(219);
 	
 	var _templatesCreateAccountHtml2 = _interopRequireDefault(_templatesCreateAccountHtml);
 	
@@ -40665,7 +40764,7 @@
 	module.exports = accountControllerView;
 
 /***/ },
-/* 216 */
+/* 217 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/**
@@ -41021,117 +41120,16 @@
 
 
 /***/ },
-/* 217 */
+/* 218 */
 /***/ function(module, exports) {
 
 	module.exports = "<table class=\"table table-striped table-bordered table-hover\">\n  <tr>\n    <th>number</th>\n  </tr>\n  <tr>\n    <td>1</td>\n  </tr>\n  <tr>\n    <td>2</td>s\n  </tr>\n  </table>";
 
 /***/ },
-/* 218 */
+/* 219 */
 /***/ function(module, exports) {
 
 	module.exports = "<form>\n\t\n\t<label for=\"name-field\">Name</label>\n\t<input class=\"form-control\" type=\"text\" id=\"name-field\">\n\n</form>\n<button class=\"btn btn-primary-outline btn-done\">Done</button>";
-
-/***/ },
-/* 219 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-	
-	var _react = __webpack_require__(7);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _reactDom = __webpack_require__(164);
-	
-	var _reactDom2 = _interopRequireDefault(_reactDom);
-	
-	var _backbone = __webpack_require__(165);
-	
-	var _backbone2 = _interopRequireDefault(_backbone);
-	
-	var _pagesTodoReactTodoModel = __webpack_require__(167);
-	
-	var _pagesTodoReactTodoModel2 = _interopRequireDefault(_pagesTodoReactTodoModel);
-	
-	var _pagesTodoReactTodoView = __webpack_require__(181);
-	
-	var _pagesTodoReactTodoView2 = _interopRequireDefault(_pagesTodoReactTodoView);
-	
-	var _pagesTodoReactTodoDispatcher = __webpack_require__(220);
-	
-	var _pagesTodoReactTodoDispatcher2 = _interopRequireDefault(_pagesTodoReactTodoDispatcher);
-	
-	var $ = __webpack_require__(1);
-	
-	var TodoListView = _backbone2['default'].View.extend({
-	  el: '.todo-container',
-	  model: _pagesTodoReactTodoModel2['default'],
-	  events: {
-	    'click .btn-add': 'addTodoItem'
-	  },
-	  initialize: function initialize() {
-	    this.model.fetch();
-	    this.model.on('change', this.render, this);
-	  },
-	  render: function render() {
-	    // render the todo items
-	    var todos = this.model.get('todos');
-	    var $ul = this.$el.find('.list-group');
-	    $ul.html('');
-	    todos.forEach(function (todo) {
-	      var $li = $('<li class="list-group-item row"></li>');
-	      $ul.append($li);
-	      _reactDom2['default'].render(_react2['default'].createElement(_pagesTodoReactTodoView2['default'], { data: todo }), $li[0] // react does not recognize jQuery selector, get original DOMnode from jQuery object
-	      );
-	    });
-	  },
-	  addTodoItem: function addTodoItem() {
-	    var $input = this.$el.find('.input-name');
-	    var newTitle = $input.val();
-	    if (newTitle === '') {
-	      return;
-	    }
-	    _pagesTodoReactTodoDispatcher2['default'].addTodo(newTitle);
-	  }
-	});
-	
-	module.exports = TodoListView;
-
-/***/ },
-/* 220 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-	
-	var _todoModel = __webpack_require__(167);
-	
-	var _todoModel2 = _interopRequireDefault(_todoModel);
-	
-	var dispatcher = {
-	  init: function init() {},
-	  clickComplete: function clickComplete(id) {
-	    _todoModel2['default'].itemCompleted(id);
-	  },
-	  addTodo: function addTodo(id) {
-	    _todoModel2['default'].addItem(id);
-	  },
-	  removeTodo: function removeTodo(id) {
-	    _todoModel2['default'].removeItem(id);
-	  },
-	  editTodoTitle: function editTodoTitle(id, title) {
-	    _todoModel2['default'].editTitle(id, title);
-	  },
-	  startEditMode: function startEditMode(id) {
-	    _todoModel2['default'].startEditing(id);
-	  }
-	};
-	
-	module.exports = dispatcher;
 
 /***/ }
 /******/ ]);
