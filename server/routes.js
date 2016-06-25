@@ -23,13 +23,13 @@ router.get('/api', function(req, res){
 
 router.post('/api', function(req, res){
   var todos = req.body.todos;
-    fs.writeFile(databasePath, todos, function(err){
-      if (err) { console.log(err); }
-      // respond to the client
-      res.writeHead(200, {'Content-Type': 'text/json'});
-      res.write(todos);
-      res.end();
-    });
+  fs.writeFile(databasePath, todos, function(err){
+    if (err) { console.log(err); }
+    // respond to the client
+    res.writeHead(200, {'Content-Type': 'text/json'});
+    res.write(todos);
+    res.end();
+  });
 });
 
 
