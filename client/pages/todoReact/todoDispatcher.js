@@ -5,11 +5,13 @@ var dispatcher = {
   clickComplete: function(id){
     todoModel.itemCompleted(id);
   },
-  addTodo: function(title){
-    if (title !== '' 
+  addTodo: function(id, title){
+    if (
+      title !== '' 
       && typeof title === 'string'
+      && title.length > 0
     ) {
-      todoModel.addItem(title);
+      todoModel.addItem(id, title);
     }
   },
   removeTodo: function(id){

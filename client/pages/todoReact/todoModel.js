@@ -55,8 +55,9 @@ var TodoModel = Backbone.Model.extend({
     }); 
     return data;
   },
-  addItem: function(newTitle){
+  addItem: function(id, newTitle){
     var newTodo = {title: newTitle};
+    var item = _.findWhere(todos, {id: id});
     var todos = this.get('todos');
     todos.push(newTodo);
     this.set('todos', todos);

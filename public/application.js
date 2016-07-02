@@ -58,8 +58,6 @@
 	
 	var _pagesTodoReactTodoListView2 = _interopRequireDefault(_pagesTodoReactTodoListView);
 	
-	// import project from 'pages/project';
-	
 	var _pagesPhotoSearch = __webpack_require__(183);
 	
 	var _pagesPhotoSearch2 = _interopRequireDefault(_pagesPhotoSearch);
@@ -72,11 +70,13 @@
 	
 	var _pagesFormsBackbone2 = _interopRequireDefault(_pagesFormsBackbone);
 	
-	// import header from 'components/header';
+	var _componentsHeader = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"components/header\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+	
+	var _componentsHeader2 = _interopRequireDefault(_componentsHeader);
 	
 	(0, _jquery2['default'])(function () {
 	
-	  // header.init();
+	  _componentsHeader2['default'].init();
 	
 	  // what page are we on?
 	  var url = window.location.pathname;
@@ -86,8 +86,9 @@
 	    case '/pages/todo.html':
 	      var todoListView = new _pagesTodoReactTodoListView2['default']();
 	      break;
-	    case '/pages/project.html':
+	    case '/':
 	      // init the project javascript
+	      // home.init();
 	      break;
 	    case '/pages/photoSearch.html':
 	      _pagesPhotoSearch2['default'].init();
@@ -101,6 +102,12 @@
 	    default:
 	      break;
 	  }
+	
+	  // Fancy Console Message for Developers
+	  // console.log('================================');
+	  // console.log('=====I am looking for a job=====');
+	  // console.log('============call me=============');
+	  // console.log('================================');
 	});
 
 /***/ },
@@ -9928,7 +9935,7 @@
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
-	module.exports = {"todo-container":"todo-container","add-todo-container":"add-todo-container","col-sm-10":"col-sm-10","col-sm-2":"col-sm-2","square":"square","square-container":"square-container","square1":"square1","square2":"square2","square3":"square3","square4":"square4","square5":"square5","square6":"square6","page-container":"page-container","search-container":"search-container","photo":"photo"};
+	module.exports = {"todo-container":"todo-container","add-todo-container":"add-todo-container","col-sm-10":"col-sm-10","col-sm-2":"col-sm-2","page-header":"page-header","jumbotron":"jumbotron","carousel-inner":"carousel-inner","item":"item","nav":"nav","square":"square","square-container":"square-container","square1":"square1","square2":"square2","square3":"square3","square4":"square4","square5":"square5","square6":"square6","page-container":"page-container","search-container":"search-container","photo":"photo"};
 
 /***/ },
 /* 3 */,
@@ -33158,8 +33165,9 @@
 	    });
 	    return data;
 	  },
-	  addItem: function addItem(newTitle) {
+	  addItem: function addItem(id, newTitle) {
 	    var newTodo = { title: newTitle };
+	    var item = _underscore2['default'].findWhere(todos, { id: id });
 	    var todos = this.get('todos');
 	    todos.push(newTodo);
 	    this.set('todos', todos);
@@ -35730,9 +35738,9 @@
 	  clickComplete: function clickComplete(id) {
 	    _todoModel2['default'].itemCompleted(id);
 	  },
-	  addTodo: function addTodo(title) {
-	    if (title !== '' && typeof title === 'string') {
-	      _todoModel2['default'].addItem(title);
+	  addTodo: function addTodo(id, title) {
+	    if (title !== '' && typeof title === 'string' && title.length > 0) {
+	      _todoModel2['default'].addItem(id, title);
 	    }
 	  },
 	  removeTodo: function removeTodo(id) {
